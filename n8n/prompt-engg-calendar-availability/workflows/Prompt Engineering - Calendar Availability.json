@@ -1,0 +1,141 @@
+{
+  "name": "Prompt Engineering - Calendar Availability",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [0, 0],
+      "id": "d0a1a248-4004-45ce-9095-8a7b346a2de6",
+      "name": "When chat message received",
+      "webhookId": "YOUR-WEBHOOK-ID-HERE"
+    },
+    {
+      "parameters": {
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# Role\nYou are a scheduling assistant working for a beauty salon.\nYour role is to help customers schedule an appointment in the beauty salon's calendar.\n\n# Instructions\nFollow the following steps to book an appointment for the user:\n1. Ask the user for their preferred appointment day\n2. Use the check_calendar_availability tool to identify free time slots for the user-specified day.\n3. Show the user available time slots for their preferred day and get from user the time slot they would like to book an appointment for. If there are no available time slots for that day, start from step 1 again and ask the user for a new day preference.\n4. Ask the user for the information you require to book the calendar appointment. In order to book the appointment, you need the user's full name, and email.\n5. Use the create_calendar_appointment tool to book the appointment for the user, using details captured from step 4.\n6. Once the appointment is booked, notify the user with relevant details for their appointment. Notify user if it was not possible to create the appointment.\n\n# Rules\n- Always use UTC+05:30 timezone when using tools for their outputs.\n- Don't make things up, ask the user a clarifying question if you need additional information to complete your task. If you're asked a question to which you don't know the answer, say so.\n\n# Examples\nUse the following examples when notifying the user that you have successfully booked their appointment:\n<examples>\n<example>\nI have successfully booked your appointment, here are the details:\n**Date & Time** 15:30 on Wednesday, 15 March, 2026\n** Email for booking**: shubham@email.com\nIf you need to cancel your appointment, please call +91 8319777910\n</example>\n<example>\nI have successfully booked your appointment, here are the details:\n**Date & Time** 9:45 on Friday, 22 April, 2025\n** Email for booking**: sakshi@n8n.io\nIf you need to cancel your appointment, please call +91 8319777910\n</example>\n</examples>\n\n# Additional context\n- The data and time right now is {{ $now }}\n- The beauty salon is called Shubham's Perfect Salon\n- The beauty salon's phone number is +91 8319777910\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [208, 0],
+      "id": "b3c2ae0b-6725-4548-87d4-414b3c41fa02",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [80, 208],
+      "id": "b789b9bb-0a4c-4030-bb03-bab9886d01f4",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YOUR-GEMINI-ACCOUNT-ID",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [240, 256],
+      "id": "6910d92e-6842-4d8f-b0c5-5d540d978aa5",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this check_calendar_availability tool to fetch existing appointments for a specified period and determine when there are available time slots that can accommodate a new appointment.\n\n# Instructions\n1. Specify the Date and Range - To fetch events for a specific day, set eventsAfter to 8:59 of that day and eventsBefore to 18:01 of the same day (adjust these times if needed).\n2. Retrieve Existing Appointments - The tool will return all booked appointments within specified date and time range.\n3. Calculate Available Slots - Once you have the existing appointments, calculate the gaps between them to find potential availability. Ensure each gap is atleast as long as the required appointment length. Do not allow any overlap with existing appointments.\n\nBy following these steps, you can accurately find valid appointment windows based on the already-book events.",
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "your-email@example.com",
+          "mode": "list",
+          "cachedResultName": "your-email@example.com"
+        },
+        "timeMin": "={{ $fromAI('eventsAfter', 'Return events after this date time in format 2025-01-22T00:00:00', string, $now.plus({ week: 1 })) }}",
+        "timeMax": "={{ $fromAI('eventsBefore', 'Return events before this date time in format 2025-01-22T00:00:00', string, $now.minus({ week: 1 })) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [448, 256],
+      "id": "e8ff95df-d46a-456a-8c08-979d89849504",
+      "name": "check_calendar_availability",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "YOUR-CALENDAR-ACCOUNT-ID",
+          "name": "Google Calendar account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check_calendar_availability": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "d1837bbe-bc72-4253-8ee2-d37083ae6c43",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b618142ca0ad90df4c1301a6c2fff988078238ee089eb7f77b55199e1a88f861"
+  },
+  "id": "g1BbFTdd2cJ2E9q7",
+  "tags": []
+}
