@@ -1,0 +1,148 @@
+{
+  "name": "QA AI Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "availableInChat": true,
+        "agentName": "QA Chatbot",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [0, 0],
+      "id": "d6ed1326-6d7e-4adf-b1f2-b47ec400e022",
+      "name": "When chat message received",
+      "webhookId": "a4a49523-4db5-4f65-88c9-a44ec839c49c"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful Q&A assistant that answers questions based on feedback data. Use tools to search for relevant information by querying the 'question' and 'tags' columns.  When a user asks a question, search the QA database to find matching questions or relevant tags, then provide the corresponding answer. If you find multiple relevant entries, synthesize the information. If no relevant information is found, politely inform the user that you don't have that information in the QA database."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [208, 0],
+      "id": "ee28e860-88e4-4795-94db-ff64db5d879f",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [80, 208],
+      "id": "ca67d62b-4c9d-4d79-8b5a-5f66964f0510",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "<YOUR_GEMINI_CREDENTIAL_ID>",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [224, 208],
+      "id": "fa89032f-a355-436b-9eee-4d48aa2bc0f9",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this tool to search the Feedback data table for relevant entries. Provide a search query that will be matched against the 'question' column to find relevant feedback. The tool returns matching entries with their answer. Always provide a specific search term on what the user is asking about.",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "sFAwXuHZo7icc9nd",
+          "mode": "list",
+          "cachedResultName": "q&a",
+          "cachedResultUrl": "/projects/Z6tElFF3Qb7JhgXw/datatables/sFAwXuHZo7icc9nd"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Question",
+              "condition": "ilike",
+              "keyValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('conditions0_Value', `The search term or question to look for in the feedback database. Filters by questions containing your search term so use single words or short fragments`, 'string') }}"
+            },
+            {
+              "keyName": "Tags",
+              "condition": "ilike",
+              "keyValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('conditions1_Value', `key terms for this question:answer pair that was classified by AI. Use one search term per tool invocation.`, 'string') }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1.1,
+      "position": [368, 208],
+      "id": "edd845c7-0bec-478c-ade3-603bb98f3162",
+      "name": "fetch-qa-from-db"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetch-qa-from-db": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2cee273b-be39-41e2-818a-c75ba9919776",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b618142ca0ad90df4c1301a6c2fff988078238ee089eb7f77b55199e1a88f861"
+  },
+  "id": "tce1d3rwYDrznxFW",
+  "tags": []
+}

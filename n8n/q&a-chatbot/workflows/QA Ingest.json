@@ -1,0 +1,343 @@
+{
+  "name": "QA Ingest",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "QA Submission",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name"
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "Question"
+            },
+            {
+              "fieldLabel": "Answer",
+              "fieldType": "textarea"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [0, 0],
+      "id": "a591423f-9fea-47c4-9636-e83c578f18f6",
+      "name": "On form submission",
+      "webhookId": "c9ddc95d-44e5-4574-803c-dfe4cd816e52"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "74cc1ffe-be9a-4e6e-a9ff-f5597bd40937",
+              "leftValue": "={{ $json.Email }}",
+              "rightValue": "n8n.io",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [208, 0],
+      "id": "48c7e867-c7f8-46dd-a578-ef254e0a924d",
+      "name": "is n8n.io email?"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "26056552-444f-40f5-bc6b-2f86ada9aa7f",
+              "name": "isTrusted",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [416, -144],
+      "id": "1cc77661-e4b1-4c97-8ba3-3a6feb29da56",
+      "name": "isTrusted:true"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "26056552-444f-40f5-bc6b-2f86ada9aa7f",
+              "name": "isTrusted",
+              "value": false,
+              "type": "boolean"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [416, 80],
+      "id": "94b11da2-2db4-40e9-b0e4-8e748e99aedd",
+      "name": "isTrusted:false"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [640, -32],
+      "id": "894baf4f-28bd-4734-a395-905d8f717f8a",
+      "name": "ref"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [784, 176],
+      "id": "3839eda5-ae63-4c64-8a1f-3b25c462392c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "<YOUR_GEMINI_CREDENTIAL_ID>",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze the following question and answer and output relevant tags\n\nQuestion: {{ $json.Question }}\nAnswer: {{ $json.Answer }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a content tagging expert. Your task is to analyze Question and Anwer submissions and generate relevant, descriptive tags that categorize the content based on topic, key concepts, and technical terms. Always provide 4-8 tags as a comma separated list. Keep tags short and focused in individual length.\n\nExample Output:\npartner, partnerships, agency, external contractors, lead referral"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [848, -32],
+      "id": "16c6aa20-ec88-4de4-903d-eb82304f36c8",
+      "name": "Add tags"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "sFAwXuHZo7icc9nd",
+          "mode": "list",
+          "cachedResultName": "q&a",
+          "cachedResultUrl": "/projects/Z6tElFF3Qb7JhgXw/datatables/sFAwXuHZo7icc9nd"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "isTrusted": "={{ $('ref').item.json.isTrusted }}",
+            "Tags": "={{ $json.text }} }}",
+            "Name": "={{ $('ref').item.json.Name }}",
+            "Question": "={{ $('ref').item.json.Question }}",
+            "Email": "={{ $('ref').item.json.Email }}",
+            "Answer": "={{ $('ref').item.json.Answer }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Question",
+              "displayName": "Question",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tags",
+              "displayName": "Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "isTrusted",
+              "displayName": "isTrusted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Answer",
+              "displayName": "Answer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [1200, -32],
+      "id": "01897c08-7417-4ba7-af8e-f7d00f5c7416",
+      "name": "Insert row"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "is n8n.io email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is n8n.io email?": {
+      "main": [
+        [
+          {
+            "node": "isTrusted:true",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "isTrusted:false",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "isTrusted:true": {
+      "main": [
+        [
+          {
+            "node": "ref",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "isTrusted:false": {
+      "main": [
+        [
+          {
+            "node": "ref",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ref": {
+      "main": [
+        [
+          {
+            "node": "Add tags",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Add tags",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add tags": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "5c608365-dad7-4d7e-b19f-9b85ed9f16e7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b618142ca0ad90df4c1301a6c2fff988078238ee089eb7f77b55199e1a88f861"
+  },
+  "id": "FnugoJXJHs9T4edt",
+  "tags": []
+}
