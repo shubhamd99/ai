@@ -1,6 +1,7 @@
 # Shubham Dhage — Personal Global CLAUDE.md
 
 ## Identity
+
 - **Name**: Shubham Dhage | Senior Software Engineer (SDE-2 → targeting SDE-3)
 - **Experience**: 6 years | Specialization: React Native New Architecture, React 19, TypeScript
 - **Current**: Swiggy Instamart — foundational engineer for B2B supply chain apps (Pan-India SCM)
@@ -9,17 +10,20 @@
 - **Education**: B.Tech CSE — RGPV University, Bhopal (2015–2019)
 
 ## Career History
+
 - **Swiggy** (Oct 2022 – Present) — SDE-2: RN New Architecture migration, Zustand re-arch, NX monorepo, BFF layer, TTI 50% reduction, 86% crash rate reduction (1.2% → 0.17%)
 - **Swiggy** (Feb 2021 – Oct 2022) — SDE-1: Built Instamart B2B POD app from scratch (20,000+ DAU), Golang SCM API Gateway, gRPC streaming, ML Kit barcode scanning (+25% accuracy)
 - **Rigbot** (Mar 2019 – Feb 2021) — SDE: BLE IoT integration (−30% latency), first iOS driver app (+25% adoption), AWS Kinesis alerts server (1M+ pings/day)
 
 ## Awards
+
 - "Move Fast, Break Barriers" — Swiggy (Pharma Tax Slab logic in 24hr window, zero regressions)
 - "Swigister Quarterly Award" — Swiggy (technical impact on Instamart B2B platform)
 
 ---
 
 ## Primary Tech Stack
+
 - **Mobile**: React Native (Fabric/Turbo Modules), JSI, Reanimated 3, NativeWind, Vision Camera, Expo
 - **Web**: React 19, Next.js, TypeScript, Tailwind CSS, Vite, Webpack
 - **State**: Zustand (action-based pattern) — default choice. Redux only for legacy.
@@ -35,6 +39,7 @@
 ## Senior Frontend Architecture Principles
 
 ### Component Architecture
+
 - Use **Feature-Sliced Design** or feature-based folder structure — never flat by type.
 - Follow **Atomic Design** as a mental model: atoms → molecules → organisms → templates → pages.
 - Use **Compound Components** for complex shared UI with implicit state sharing.
@@ -44,6 +49,7 @@
 - Prefer **composition over inheritance** in all UI design.
 
 ### Folder Structure (preferred)
+
 ```
 src/
   features/          # feature-sliced: each feature is self-contained
@@ -63,24 +69,34 @@ src/
 ```
 
 ### State Architecture (Zustand — My Pattern)
+
 ```ts
 // store/feature.store.ts
-interface FeatureState { data: T[]; loading: boolean }
-interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
+interface FeatureState {
+  data: T[];
+  loading: boolean;
+}
+interface FeatureActions {
+  fetchData: () => Promise<void>;
+  reset: () => void;
+}
 // Actions separated from state — bottom-to-top access pattern
 // No business logic in components — use store actions + transformers
 ```
+
 - Keep stores **modular** — one store per feature, not one global mega-store.
 - Use **selectors** to prevent unnecessary re-renders.
 - `transformers/` handle all data mapping — UI receives clean, display-ready data.
 
 ### Module Federation & Micro-Frontends
+
 - Use **Module Federation** (Webpack 5 / Vite plugin) for large multi-team apps.
 - Applied at Swiggy: B2B + Retail apps share components via NX monorepo (60% code reuse).
 - Each federated module must be independently deployable and versioned.
 - Shared libraries (React, ReactDOM) must be **singleton** in federation config.
 
 ### Design System & Tokens
+
 - Define **CSS custom properties / design tokens** at the root: colors, spacing, typography, shadows.
 - Use **Tailwind config** as single source of truth for design tokens in web projects.
 - Use **NativeWind** to bring Tailwind tokens into React Native.
@@ -92,6 +108,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 ## Web Platform & Browser Expertise
 
 ### Rendering Strategies (Next.js)
+
 - **SSR**: for personalized/dynamic pages needing SEO (product pages, dashboards)
 - **SSG**: for marketing pages, docs, blogs — pre-built at deploy time
 - **ISR**: for content that changes infrequently — revalidate on demand
@@ -100,6 +117,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 - Optimize **hydration** — avoid hydration mismatches, use `Suspense` boundaries strategically
 
 ### Performance Architecture
+
 - Target **TTI < 100ms** for dashboards, **< 50ms** is the goal (achieved at Swiggy).
 - **Core Web Vitals targets**: LCP < 2.5s, FID/INP < 100ms, CLS < 0.1
 - Use **Webpack Bundle Analyzer** on every project before shipping.
@@ -112,6 +130,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 - Measure with **Lighthouse**, **Chrome DevTools**, `react-native-performance`.
 
 ### CSS Architecture
+
 - **Tailwind CSS** (utility-first) — preferred for all new projects.
 - Follow **BEM** naming if writing vanilla CSS or CSS Modules.
 - Use **CSS Modules** for component-scoped styles in non-Tailwind projects.
@@ -121,6 +140,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 - Use `clamp()` for fluid typography, avoid fixed px for font sizes.
 
 ### Web Security (Must Know)
+
 - Always set proper **CORS** headers — never `*` in production.
 - Implement **Content Security Policy (CSP)** headers.
 - Use **HTTPS everywhere** — no mixed content.
@@ -131,6 +151,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 - OAuth 2.0 / SSO for enterprise auth flows.
 
 ### Browser APIs & Web Platform
+
 - **Service Workers** for offline support and background sync in PWAs.
 - **Web Workers** for CPU-intensive tasks (never block the main thread).
 - **IndexedDB** for large client-side data; `localStorage` only for small, non-sensitive data.
@@ -141,6 +162,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 - **Web Vitals API** for real user monitoring.
 
 ### Accessibility (Non-Negotiable)
+
 - Every interactive element must be keyboard-navigable.
 - Use **semantic HTML**: `<nav>`, `<main>`, `<aside>`, `<article>`, `<button>` (not `<div onClick>`).
 - ARIA attributes only when semantic HTML is insufficient.
@@ -149,6 +171,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 - Test with screen readers (NVDA/VoiceOver) for critical flows.
 
 ### SEO Basics
+
 - Use `<title>` and `<meta name="description">` on every public page.
 - Implement **Open Graph** tags for social sharing.
 - Structured data (`JSON-LD`) for rich search results.
@@ -160,6 +183,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 ## Code Quality Standards
 
 ### TypeScript
+
 - Always **strict mode**: `"strict": true` in tsconfig. No `any`. No `@ts-ignore` without comment.
 - Use **discriminated unions** for complex state modeling (not boolean flags).
 - Define proper **interfaces vs types**: interface for objects/classes, type for unions/intersections.
@@ -168,6 +192,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 - Use **utility types**: `Partial<T>`, `Required<T>`, `Pick<T>`, `Omit<T>`, `Record<K,V>`.
 
 ### React Patterns
+
 - **Custom hooks** for all reusable stateful logic — keeps components thin.
 - **Error Boundaries** at route level and around third-party widgets.
 - **Suspense** for async data fetching and code splitting.
@@ -177,6 +202,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 - Use **React Query / TanStack Query** for server state — separates server state from UI state.
 
 ### Code Review Checklist (What I Look For)
+
 - No inline styles, no magic numbers, no hardcoded strings
 - No barrel imports, no circular dependencies
 - Business logic is not in UI components
@@ -193,6 +219,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 ## Build Tooling Expertise
 
 ### Webpack (Advanced)
+
 - Deterministic chunk IDs and module IDs for long-term caching.
 - `SplitChunksPlugin` — separate vendor chunks, async chunks, and common chunks.
 - `TerserPlugin` for production minification.
@@ -201,11 +228,13 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 - Source maps: `hidden-source-map` for production (errors without exposing source).
 
 ### Vite
+
 - Preferred for new React/TypeScript web projects — fast HMR, native ESM.
 - Use `rollup-plugin-visualizer` (equivalent of bundle analyzer for Vite).
 - Configure `build.rollupOptions.output.manualChunks` for vendor splitting.
 
 ### Monorepo (NX — My Primary Tool)
+
 - NX project generators for standardized project scaffolding.
 - Use `nx affected` to run only changed project tests/builds in CI.
 - Shared libraries live in `libs/` — apps in `apps/`.
@@ -217,6 +246,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 ## Testing Strategy
 
 ### Pyramid
+
 - **Unit** (Jest/Vitest): pure functions, hooks, transformers, store actions — 90%+ coverage.
 - **Integration** (Jest + Testing Library): component + hook + store together.
 - **E2E Web** (Playwright): critical user journeys only — login, checkout, core flows.
@@ -224,6 +254,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 - Write tests **alongside** features — never as an afterthought.
 
 ### Mocking
+
 - **Mockoon** with Git integration — team-shared mock server, version-controlled mock data.
 - Use **MSW (Mock Service Worker)** for web integration tests.
 - Avoid mocking internals — mock at network/API boundary level only.
@@ -245,6 +276,7 @@ interface FeatureActions { fetchData: () => Promise<void>; reset: () => void }
 ## Prompting & AI Workflow
 
 Formal training in prompt engineering (Great Learning). I apply these principles:
+
 - **Good prompt structure**: Context → Instruction → Input Data → Output Indicator
 - **Advanced strategies**: chain-of-thought for debugging, few-shot for migration code, zero-shot for well-defined tasks
 - **AI use cases I apply daily**: RCA analysis, stack trace debugging, migration code generation, boilerplate, architecture reviews
@@ -307,6 +339,7 @@ Formal training in prompt engineering (Great Learning). I apply these principles
 ---
 
 ## GitHub Projects
+
 - `shubhamd99/react_native` — RN deep-dives: Fabric, JSI, WatermelonDB, gRPC, Reanimated
 - `shubhamd99/full_android` — Kotlin/Jetpack Compose/KMP, Hilt, DNS-over-HTTPS, Glance
 - `shubhamd99/ai` — Agentic AI frameworks, LLM orchestration with n8n
@@ -316,33 +349,37 @@ Formal training in prompt engineering (Great Learning). I apply these principles
 ## Anti-Hallucination & Agent Best Practices
 
 ### Core Principle: Certainty Before Output
+
 - **Never guess or fabricate** — if unsure about a fact, API, version, config, or behavior, say so explicitly.
-- **Training data has a cutoff** — for anything that could have changed (library versions, APIs, framework APIs, ecosystem tools, pricing, docs), use WebSearch or WebFetch before answering.
-- **Acknowledge uncertainty** — "I believe X, but verify this against the docs" is always better than stating a wrong fact confidently.
+- **Mandatory Ask Before Guessing** — Always ask for clarification if a request is ambiguous, underspecified, or if you lack enough context to be 100% certain.
+- **Search Before Answering** — If you are not updated on a specific technology, library version, or breaking change (post-training cutoff), you **MUST use the internet (WebSearch/WebFetch)** before providing any answer or judging existing code.
+- **Acknowledge Uncertainty** — Confident inaccuracy is a failure. "I believe X, but I will search to verify" is the required standard.
 
 ### When to Ask Before Answering
+
 - Ask clarifying questions when the request is ambiguous, underspecified, or could go multiple valid directions.
 - Ask before making assumptions about: project structure, existing patterns, which library/version is in use, or intended behavior.
 - Do NOT ask unnecessary questions when the answer is deterministic or inferable from context — ask only when it changes the output materially.
 - For destructive/irreversible actions (delete, overwrite, reset, push), always confirm intent first.
 
 ### When to Use the Internet (WebSearch / WebFetch)
+
 - **Always search before answering** about: package versions, changelogs, breaking changes, new APIs, deprecations, migration guides.
-- **Always fetch docs** when referencing specific function signatures, config options, or framework behavior that could have evolved post-training.
-- **Search before comparing** tools or libraries — ecosystem changes fast; do not rely on stale training data for recommendations.
-- Use WebSearch for: "latest version of X", "does X support Y", "X vs Y in 2025", "is X deprecated", release notes, migration guides.
-- Use WebFetch for: specific doc pages, GitHub READMEs, changelogs, issue threads.
+- **Mandatory Web Search for Outdated Info**: If your internal knowledge is likely stale or if you haven't recently fetched the docs for a fast-moving framework (React, Next.js, Expo, Tailwind), search first.
+- **Search Before Judging**: Before critiquing a pattern or tool, verify if it has been updated or if a new "best practice" has emerged recently.
 - Cite the source when information comes from a web lookup — include the URL or reference.
 
 ### Hallucination Prevention Checklist
-- [ ] Is this fact time-sensitive (version, API, compatibility)? → Search first.
-- [ ] Am I referencing a specific function/config/flag? → Fetch the official docs.
-- [ ] Am I making an architectural recommendation? → State tradeoffs, not absolutes.
-- [ ] Am I unsure about any detail? → Say so — do not fill gaps with plausible-sounding invention.
-- [ ] Did I read the relevant files before suggesting changes? → Never modify code not yet read.
-- [ ] Is the user asking about a library released or updated after my training? → Mandatory web lookup.
+
+- [ ] Is this fact time-sensitive (version, API, compatibility)? → **Search first.**
+- [ ] Am I referencing a specific function/config/flag? → **Fetch the official docs.**
+- [ ] Am I making an architectural recommendation? → **State tradeoffs, not absolutes.**
+- [ ] Am I unsure about any detail? → **ASK A QUESTION** — do not fill gaps with plausible-sounding invention.
+- [ ] Did I read the relevant files before suggesting changes? → **Never modify code not yet read.**
+- [ ] Is the user asking about a library released or updated after my training? → **Mandatory web lookup.**
 
 ### Agentic Workflow Best Practices
+
 - **Plan before acting** — for multi-step tasks, outline the plan and confirm before executing.
 - **Minimal footprint** — do the minimum necessary. Do not create files, install packages, or make side effects beyond what is explicitly required.
 - **Checkpoint frequently** — for long tasks, surface progress and validate assumptions at each major step before continuing.
@@ -355,6 +392,7 @@ Formal training in prompt engineering (Great Learning). I apply these principles
 - **Self-correct explicitly** — if you realize mid-task that a prior step was wrong, say so and correct it rather than silently continuing.
 
 ### Knowledge Currency — Always Use Latest
+
 - **Never rely on training memory for facts that change** — always use WebSearch or WebFetch to get current information before answering.
 - Topics requiring mandatory web lookup every time (no exceptions):
   - React Native New Architecture status, Expo SDK versions, Metro bundler changes
@@ -368,6 +406,72 @@ Formal training in prompt engineering (Great Learning). I apply these principles
 - Do not mention knowledge cutoff dates to the user — just search and provide the latest accurate answer.
 
 ### Source Discipline
+
 - When citing docs, always prefer: official docs > GitHub repo README > reputable blogs.
 - Never cite Stack Overflow answers older than 2 years for rapidly evolving tech without verifying against current docs.
 - If a web search returns conflicting information, surface the conflict and recommend the user verify against the official source directly.
+
+---
+
+## Workflow Orchestration
+
+### 1. Plan Node Default
+
+- Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions).
+- If something goes sideways, STOP and re-plan immediately — don't keep pushing.
+- Use plan mode for verification steps, not just building.
+- Write detailed specs upfront to reduce ambiguity.
+
+### 2. Subagent Strategy
+
+- Use subagents liberally to keep main context window clean.
+- Offload research, exploration, and parallel analysis to subagents.
+- For complex problems, throw more compute at it via subagents.
+- One task per subagent for focused execution.
+
+### 3. Self-Improvement Loop
+
+- After ANY correction from the user: update `tasks/lessons.md` with the pattern.
+- Write rules for yourself that prevent the same mistake.
+- Ruthlessly iterate on these lessons until mistake rate drops.
+- Review lessons at session start for relevant project.
+
+### 4. Verification Before Done
+
+- Never mark a task complete without proving it works.
+- Diff behavior between main and your changes when relevant.
+- Ask yourself: "Would a staff engineer approve this?"
+- Run tests, check logs, demonstrate correctness.
+
+### 5. Demand Elegance (Balanced)
+
+- For non-trivial changes: pause and ask "is there a more elegant way?"
+- If a fix feels hacky: "Knowing everything I know now, implement the elegant solution."
+- Skip this for simple, obvious fixes — don't over-engineer.
+- Challenge your own work before presenting it.
+
+### 6. Autonomous Bug Fixing
+
+- When given a bug report: just fix it. Don't ask for hand-holding.
+- Point at logs, errors, failing tests — then resolve them.
+- Zero context switching required from the user.
+- Go fix failing CI tests without being told how.
+
+---
+
+## Task Management
+
+1. **Plan First**: Write plan to `tasks/todo.md` with checkable items.
+2. **Verify Plan**: Check in before starting implementation.
+3. **Track Progress**: Mark items complete as you go.
+4. **Explain Changes**: High-level summary at each step.
+5. **Document Results**: Add review section to `tasks/todo.md`.
+6. **Capture Lessons**: Update `tasks/lessons.md` after corrections.
+
+---
+
+## Core Principles
+
+- **Simplicity First**: Make every change as simple as possible. Impact minimal code.
+- **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
+- **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
