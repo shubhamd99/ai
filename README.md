@@ -177,3 +177,10 @@ Context engineering is the layer that orchestrates all of these together in prod
 - **Connection (or Wire):** The visual line connecting two nodes. It dictates the sequence of operations and passes JSON data from the output of one node to the input of the next.
 - **Credentials:** A secure way to store authentication details (like API Keys, OAuth tokens, or passwords) needed for nodes to communicate with third-party software securely without exposing secrets directly in the workflow logic.
 - **n8n Data Tables (Local DB):** Built-in storage within an n8n environment, allowing workflows to store, append, filter, and retrieve persistent tabular data easily (useful when building custom memory or RAG apps).
+
+---
+
+## 📚 Resources & Directories
+
+- [Cursor Directory](https://cursor.directory/rules) - A comprehensive directory of prompts and rules for AI coding assistants.
+
