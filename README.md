@@ -194,6 +194,16 @@ To maximize the capabilities of AI coding assistants like **Gemini CLI** or **Cl
 - **What it does:** It crawls entire websites or documentation portals and converts them into clean, structured, LLM-ready Markdown.
 - **How it helps Gemini CLI / Claude Code:** Instead of manually copying and pasting pages of API docs, you can use Firecrawl (often via its own MCP server or API) to ingest an entire site's documentation. When you feed this high-quality Markdown into Claude Code or Gemini CLI, the AI gains an immediate, comprehensive understanding of any custom or newly updated API, resulting in highly accurate code generation and architecture planning.
 
+### Superpowers Plugin
+The **Superpowers Plugin** ([GitHub](https://github.com/obra/superpowers)) is an official extension for Anthropic's Claude Code that enhances the assistant with advanced development workflows.
+- **What it does:** It introduces capabilities like brainstorming, sub-agent driven development, systematic debugging, and red/green Test-Driven Development (TDD).
+- **How it helps Gemini CLI / Claude Code:** By adding these agentic workflows, it enables the AI assistant to operate more autonomously on complex tasks, breaking them down through sub-agents and verifying code functionality rigorously.
+
+### Frontend Design Plugin
+The **Frontend Design Plugin** ([GitHub](https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design)) is an official extension for Claude Code that generates distinctive, production-grade frontend interfaces.
+- **What it does:** It completely overhauls the generic AI aesthetic by introducing bold aesthetic choices, distinctive typography and color palettes, and high-impact micro-animations natively configured into generated code.
+- **How it helps Gemini CLI / Claude Code:** When used for frontend tasks, it acts as an automatic design multiplier. It ensures all UI code is highly polished and production-ready without requiring exhaustive manual styling instructions, significantly speeding up high-quality frontend generation.
+
 ---
 
 ## 📚 Resources & Directories
