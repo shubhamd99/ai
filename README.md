@@ -180,6 +180,22 @@ Context engineering is the layer that orchestrates all of these together in prod
 
 ---
 
+## 🔌 External Context Tools (MCP & Web Scraping)
+
+To maximize the capabilities of AI coding assistants like **Gemini CLI** or **Claude Code**, integrating external context tools is essential. These tools help bridge the gap between the AI's training data cutoff and the most current documentation or live web data.
+
+### Model Context Protocol (MCP) & Context7
+**MCP (Model Context Protocol)** is an open standard that connects AI models securely to external data sources and developer tools.
+- **Context7 MCP:** An MCP server (developed by Upstash) that parses and indexes the latest library documentation. 
+- **How it helps Gemini CLI / Claude Code:** By connecting Context7 via MCP, the assistant dynamically retrieves and injects live, version-specific documentation and code examples directly into the AI's context window based on your active codebase. This dramatically reduces hallucinations when working with newly released frameworks (e.g., React 19, Next.js App Router updates) that the model might not have been fully trained on.
+
+### Firecrawl
+**Firecrawl** is an advanced web scraping and documentation extraction tool designed specifically for LLMs.
+- **What it does:** It crawls entire websites or documentation portals and converts them into clean, structured, LLM-ready Markdown.
+- **How it helps Gemini CLI / Claude Code:** Instead of manually copying and pasting pages of API docs, you can use Firecrawl (often via its own MCP server or API) to ingest an entire site's documentation. When you feed this high-quality Markdown into Claude Code or Gemini CLI, the AI gains an immediate, comprehensive understanding of any custom or newly updated API, resulting in highly accurate code generation and architecture planning.
+
+---
+
 ## 📚 Resources & Directories
 
 - [Cursor Directory](https://cursor.directory/rules) - A comprehensive directory of prompts and rules for AI coding assistants.
