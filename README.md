@@ -188,6 +188,12 @@ To maximize the capabilities of AI coding assistants like **Gemini CLI** or **Cl
 **MCP (Model Context Protocol)** is an open standard that connects AI models securely to external data sources and developer tools.
 - **Context7 MCP:** An MCP server (developed by Upstash) that parses and indexes the latest library documentation. 
 - **How it helps Gemini CLI / Claude Code:** By connecting Context7 via MCP, the assistant dynamically retrieves and injects live, version-specific documentation and code examples directly into the AI's context window based on your active codebase. This dramatically reduces hallucinations when working with newly released frameworks (e.g., React 19, Next.js App Router updates) that the model might not have been fully trained on.
+- **Adding Context7 MCP:**
+  1. Get an API key from the [Context7 Dashboard](https://context7.com/dashboard).
+  2. Run the following command (replace `API_KEY` with your actual key):
+     ```bash
+     claude mcp add --scope user --header "CONTEXT7_API_KEY: API_KEY" --transport http context7 https://mcp.context7.com/mcp
+     ```
 
 ### Firecrawl
 **Firecrawl** is an advanced web scraping and documentation extraction tool designed specifically for LLMs.
