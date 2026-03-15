@@ -204,6 +204,21 @@ The **Frontend Design Plugin** ([GitHub](https://github.com/anthropics/claude-co
 - **What it does:** It completely overhauls the generic AI aesthetic by introducing bold aesthetic choices, distinctive typography and color palettes, and high-impact micro-animations natively configured into generated code.
 - **How it helps Gemini CLI / Claude Code:** When used for frontend tasks, it acts as an automatic design multiplier. It ensures all UI code is highly polished and production-ready without requiring exhaustive manual styling instructions, significantly speeding up high-quality frontend generation.
 
+### Skill Creator Plugin
+The **Skill Creator Plugin** is an official extension for Claude Code that acts as a meta-skill to help users build and refine custom Claude Skills interactively.
+- **What it does:** It analyzes requested capabilities, asks clarifying questions, and automatically generates the complete skill package, including a properly structured `SKILL.md` file from natural language descriptions.
+- **How it helps Gemini CLI / Claude Code:** It significantly streamlines the process of extending the assistant's capabilities. Instead of manually structuring directories and writing boilerplate for new skills, you can simply instruct the assistant to build a reusable skill for a specific workflow. This manages token usage more efficiently and ensures consistent output across projects.
+
+### Ralph Loop
+The **Ralph Loop** (or "Ralph Wiggum technique") is an iterative AI development methodology designed to enable AI coding assistants, particularly Claude Code, to operate autonomously on tasks for extended periods.
+- **What it does:** It typically consists of a simple bash script that continuously runs Claude, feeding it instructions and looping until success criteria are met. During each iteration, the AI sees the modified codebase, checks progress (often tracked in external files like `progress.txt` or Git history), fixes any failed checks or tests, and ships the code.
+- **How it helps Gemini CLI / Claude Code:** It transforms the assistant from an interactive conversational partner into an autonomous engineer. By leveraging the Ralph Loop, you can define clear, binary success criteria and let the AI iteratively work through a sequence of small tasks, allowing for completely hands-off overnight migrations or feature building.
+
+### Claude-mem Plugin
+The **Claude-mem Plugin** provides persistent, long-term memory to Claude Code, solving the issue of "context amnesia" between coding sessions.
+- **What it does:** It continuously observes and automatically captures Claude's actions (e.g., file reads, edits, terminal commands). It then uses a background AI agent to semantically compress these observations and index them in a local vector database.
+- **How it helps Gemini CLI / Claude Code:** When starting a new session, it automatically injects relevant compressed memories into the context. This allows the AI to recall previous design decisions, architectural context, bug fixes, and user preferences seamlessly, significantly enhancing token efficiency and consistency in long-running projects.
+
 ---
 
 ## 📚 Resources & Directories
