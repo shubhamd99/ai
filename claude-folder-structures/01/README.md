@@ -52,6 +52,10 @@ The essential project summary loaded every session.
 - **Stack:** Define your exact tech stack (e.g., Next.js 15, React 19, Zustand).
 - **Conventions:** Strict formatting, testing rules, and naming conventions.
 
+### 7. settings.json
+Controls permissions, hooks, and model config.
+- **Location:** `.claude/settings.json`
+
 ---
 
 ## 🚀 Quick Setup
