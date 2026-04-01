@@ -227,6 +227,37 @@ The **Claude-mem Plugin** provides persistent, long-term memory to Claude Code, 
 
 ---
 
+## 📁 Anatomy of the `.claude/` folder
+
+Everything Claude needs to know about your project lives right here.
+
+```text
+your-project/
+├── CLAUDE.md                    # team instructions, committed
+├── CLAUDE.local.md              # personal overrides, gitignored
+└── .claude/                     # the control center
+    ├── settings.json            # permissions + config, committed
+    ├── settings.local.json      # personal permissions, gitignored
+    ├── commands/                # custom slash commands
+    │   ├── review.md            # -> /project:review
+    │   ├── fix-issue.md         # -> /project:fix-issue
+    │   └── deploy.md            # -> /project:deploy
+    ├── rules/                   # modular instruction files
+    │   ├── code-style.md
+    │   ├── testing.md
+    │   └── api-conventions.md
+    ├── skills/                  # auto-invoked workflows
+    │   ├── security-review/
+    │   │   └── SKILL.md
+    │   └── deploy/
+    │       └── SKILL.md
+    └── agents/                  # subagent personas
+        ├── code-reviewer.md
+        └── security-auditor.md
+```
+
+---
+
 ## 📚 Resources & Directories
 
 - [Cursor Directory](https://cursor.directory/rules) - A comprehensive directory of prompts and rules for AI coding assistants.
